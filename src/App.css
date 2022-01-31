@@ -1,0 +1,52 @@
+.App {
+    display: grid;
+    width: 100%;
+    min-height: 100vh;
+    place-items: center;
+}
+
+ul {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 50px;
+    justify-content: center;
+}
+
+ul li {
+    list-style-type: none;
+    width: 120px;
+    height: 200px;
+    display: grid;
+    background-position: center center;
+    background-size: 70px;
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-clip: padding-box;
+    padding: 20px;
+}
+
+ul li h3 {
+    line-height: 1;
+    margin: 0;
+}
+
+li.spades {
+    background-image: url("./assets/spade.svg");
+}
+
+li.clubs {
+    background-image: url("./assets/clubs.svg");
+}
+
+li.diamonds {
+    background-image: url("./assets/diamonds.svg");
+}
+
+li.hearts {
+    background-image: url("./assets/heart.svg");
+}
+
+button {
+    font-size: calc(10px + 2vmin);
+}
