@@ -8,8 +8,9 @@
 ul {
     display: grid;
     grid-auto-flow: column;
-    gap: 50px;
+    gap: 0px;
     justify-content: center;
+    transform-style: preserve-3d;
 }
 
 ul li {
@@ -24,9 +25,13 @@ ul li {
     border-radius: 10px;
     background-clip: padding-box;
     padding: 20px;
+    background-color: white;
+    box-shadow: 5px 5px 10px 5px #22222250;
+    transform: rotateX(50deg) rotateZ(20deg) rotateY(0deg);
+    margin-left: -50px;
 }
 
-ul li h3 {
+ul li h2 {
     line-height: 1;
     margin: 0;
 }

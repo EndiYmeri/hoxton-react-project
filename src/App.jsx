@@ -72,6 +72,30 @@ function App() {
     })
     return count
   }
+  function stand(){
+    if(gameState.playerCount === 21){
+      let newPcHand = [...gameState.currentPlayerHand, getCard()]
+      setGameState(
+        {
+          ...gameState,
+          currentPlayerHand: newPcHand,
+        }
+      )
+    }
+    if(gameState.playerCount > gameState.pcCount){
+      let newPcHand = [...gameState.currentPlayerHand, getCard()]
+      setGameState(
+        {
+          ...gameState,
+          currentPlayerHand: newPcHand,
+        }
+      )
+    }
+    
+  }
+  function newGame(){
+
+  }
 
   useEffect(()=>{
     setCardsOnDeck(cards)
@@ -79,27 +103,46 @@ function App() {
 
   useEffect(()=>{
     let playerNewCount = getPlayerCount(gameState.currentPlayerHand)
+    let pcNewCount = getPlayerCount(gameState.currentPcHand)
 
+    let newgameStatus = playerNewCount > 21? "You lost!" : ""
     let aceValueBUttonStatus = gameState.currentPlayerHand.some(card => card.value === "A")? true: false
     setGameState(
       {
         ...gameState,
         playerCount: playerNewCount,
-        showAceValueButton: aceValueBUttonStatus
+        pcCount: pcNewCount,
+        showAceValueButton: aceValueBUttonStatus,
+        gameStatus: newgameStatus
       }
     )
-  },[gameState.playerAceValue,gameState.currentPlayerHand])
+  },[gameState.playerAceValue,gameState.currentPlayerHand, gameState.currentPcHand])
 
   return (
     <div className="App">
       <Button func={startGame} text={"Start Game"}/>
-      <Button func={hit} text={"Hit"}/>
+      {
+        gameState.gameStatus === "You lost!"
+        ? (
+          <div className='action-buttons'>
+            <h1>You lost!</h1>
+            <Button func={newGame} text={"New Game"}/>
+          </div>
+        )
+        :(
+          <div className='action-buttons'>
+            <Button func={hit} text={"Hit"}/>
+            <Button func={stand} text={"Stand"}/>
+          </div>
+        )
+      }
+     
         <h1>Player Count: {gameState.playerCount}</h1>
       <AceButtons gameState={gameState} setGameState={setGameState} />
         <h3>Player Hand: </h3>
         <CardsOnHand cardsToShow={gameState.currentPlayerHand} />
         <h1>PC Count: {gameState.pcCount}</h1>
-        <h3>PC Hand: </h3>
+        <h3>PC Hand: {gameState.pcCount}</h3>
         <CardsOnHand cardsToShow={gameState.currentPcHand} />
     </div>
   )
