@@ -1,0 +1,67 @@
+    .login-page {
+        display: grid;
+        place-content: center;
+        background-color: #222;
+    }
+    
+    .users {
+        background-color: white;
+        padding: 3rem 4rem;
+        display: grid;
+        place-items: center;
+        border-radius: 2rem;
+    }
+    
+    .users ul {
+        margin: 0;
+        padding: 0;
+        grid-auto-flow: row;
+    }
+    
+    .users ul li {
+        list-style-type: none;
+    }
+    
+    li.user {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        cursor: pointer;
+        min-width: 200px;
+    }
+    
+    li.user::after {
+        position: absolute;
+        width: 75px;
+        content: "";
+        height: 2px;
+        background-color: green;
+        bottom: -5px;
+        transition: all 0.5s ease-in-out;
+    }
+    
+    li.user:hover::after {
+        position: absolute;
+        width: 100%;
+        content: "";
+        height: 2px;
+        background-color: green;
+        bottom: -5px;
+    }
+    
+    li.user p {
+        margin: 0;
+        margin-bottom: 2px;
+    }
+    
+    .user .image img {
+        width: 70px;
+    }
+    
+    .login-page button {
+        background-color: green;
+        color: white;
+        text-transform: capitalize;
+        margin: 20px 0 0 0;
+    }

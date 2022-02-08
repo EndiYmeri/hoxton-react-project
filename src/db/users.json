@@ -1,0 +1,12 @@
+{
+    "users": [{
+        "id": 1,
+        "username": "endi",
+        "fullName": "Endi Ymeri",
+        "email": "endiymeri20@gmail.com",
+        "games": [{
+            "id": 1,
+            "name": "blackjack"
+        }]
+    }]
+}

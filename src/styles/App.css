@@ -1,8 +1,29 @@
 .App {
     display: grid;
     width: 100%;
+    height: 100vh;
+}
+
+.blackjack-game {
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+}
+
+button {
+    border-radius: 5px;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    box-shadow: none;
+    outline: none;
+    border: solid 1px #222
+}
+
+.main {
+    display: grid;
+    width: 100%;
     min-height: 100vh;
     place-items: center;
+    background-color: green;
 }
 
 ul {
@@ -13,11 +34,10 @@ ul {
     transform-style: preserve-3d;
 }
 
-ul li {
+ul li.card {
     list-style-type: none;
-    width: 120px;
-    height: 200px;
-    display: grid;
+    width: 100px;
+    height: 180px;
     background-position: center center;
     background-size: 70px;
     background-repeat: no-repeat;
@@ -29,6 +49,20 @@ ul li {
     box-shadow: 5px 5px 10px 5px #22222250;
     transform: rotateX(50deg) rotateZ(20deg) rotateY(0deg);
     margin-left: -50px;
+}
+
+.cardsDeck ul {
+    grid-auto-flow: row;
+    margin-bottom: 250PX;
+}
+
+.facedownCard.card {
+    margin-bottom: -223px;
+    box-shadow: 0px 0px 1px 1px #222;
+    background-image: url('../assets/flag.png');
+    background-size: cover;
+    border-width: 2px;
+    border-color: white;
 }
 
 ul li h2 {
