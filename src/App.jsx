@@ -6,6 +6,7 @@ import BlackJack from './pages/blackJack';
 import GameSelect from './pages/GameSelectPage';
 import LoginPage from './pages/loginPage';
 import './styles/App.css'
+import './styles/Header.css'
 import './styles/LoginPage.css'
 import './styles/GameSelect.css'
 
@@ -13,7 +14,7 @@ import './styles/GameSelect.css'
 function App() {
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
-  const [currentGame, setCurrentGame] = useState(null)
+  const [currentGame, setCurrentGame] = useState("")
   const [modal, setModal] = useState(false)
 
   useEffect(()=>{
@@ -25,21 +26,20 @@ function App() {
   const navigate = useNavigate()
   
   function logIn (user) {
-    localStorage.setItem("user",JSON.stringify(user))
-    // set user in state as the current user
     setCurrentUser(user)
-    // navigate to the main page
-
-    navigate('/game-select')
   }
   useEffect(()=>{
-    const user = JSON.parse(localStorage.getItem("user"))
-    if(user) logIn(user)
+    !currentUser? navigate('/login'):null  
   },[])
 
+  useEffect(()=>{
+    currentUser? currentGame? navigate(`/${currentGame}`): navigate('/game-select'):navigate('/login')
+  },[currentUser,currentGame])
+
   function logOut () {
-    localStorage.removeItem("user")
     setCurrentUser(null)
+    setCurrentGame("")
+    navigate('/login')
   }
   return (
     <div className="App">
@@ -66,6 +66,8 @@ function App() {
         path="/game-select"  
         element={
           <GameSelect
+            currentGame={currentGame}
+            logOut={logOut} 
             currentUser={currentUser} 
             setCurrentGame={setCurrentGame}
             />
@@ -75,8 +77,11 @@ function App() {
           path="/blackjack"  
           element={
             <BlackJack
+              currentGame={currentGame}
               currentUser={currentUser} 
+              setCurrentUser={setCurrentUser}
               logOut={logOut} 
+              setCurrentGame={setCurrentGame}
               />
             } 
         />      

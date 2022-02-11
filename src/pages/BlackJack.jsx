@@ -3,8 +3,9 @@ import cards from '../cards'
 import AceButtons from '../components/aceButtons/AceButtons'
 import Button from '../components/Button'
 import CardsOnHand from '../components/CardsOnHand'
+import Header from '../components/Header/Header'
 
-function BlackJack({currentUser, logOut}) {
+function BlackJack({currentUser,setCurrentUser, logOut, currentGame,setCurrentGame}) {
 
   const [cardsOnDeck, setCardsOnDeck] = useState([])
 
@@ -16,7 +17,11 @@ function BlackJack({currentUser, logOut}) {
     playerAceValue : 1,
     showAceValueButton:false,
     stand:false,
-    gameStatus : ""
+    gameStatus : "",
+    gameStarted: false,
+    tripleDeck: null,
+    currentBet: 10,
+    money: currentUser? currentUser.money: 0
   })
 
   function getRandomArbitrary(min, max) {
@@ -46,7 +51,8 @@ function BlackJack({currentUser, logOut}) {
         ...gameState,
         currentPlayerHand: playerInitialHand,
         currentPcHand: pcInitialHand,
-        stand:false
+        stand:false,
+        gameStarted:true
       }
     ) 
   }
@@ -105,20 +111,32 @@ function BlackJack({currentUser, logOut}) {
         addNewCardOnPcHand()
       }
       if(gameState.pcCount > gameState.playerCount && gameState.pcCount <= 21){
-       changeGameStatus("You Lost!")
+        changeGameStatus("You Lost!")
         }
       if(gameState.pcCount > 21){
-        changeGameStatus("You Win")
+        changeGameStatus("You Win!")
         }
       if(gameState.pcCount === gameState.playerCount){
-        changeGameStatus("Its a draw")
+        changeGameStatus("Its a draw!")
       }
-      }
+    }
   },[gameState.pcCount,gameState.stand])
 
   function newGame(){
-
+    startGame()
   }
+
+  useEffect(()=>{
+    if(gameState.tripleDeck){
+      let newCards = cards.concat(cards.concat(cards))
+      setCardsOnDeck(newCards)
+    }
+    else{
+      
+      let newCards = cards  
+      setCardsOnDeck(newCards)
+    }
+  },[gameState.tripleDeck])
 
   useEffect(()=>{
     setCardsOnDeck(cards)
@@ -127,59 +145,137 @@ function BlackJack({currentUser, logOut}) {
   useEffect(()=>{
     let playerNewCount = getPlayerCount(gameState.currentPlayerHand)
     let pcNewCount = getPlayerCount(gameState.currentPcHand)
-
-    let newgameStatus = playerNewCount > 21? "You lost!" : ""
+    let newMoney = gameState.money
+    let newCurrentBet = gameState.currentBet
+    let newgameStatus = playerNewCount > 21? "You Lost!" : ""
     let aceValueBUttonStatus = gameState.currentPlayerHand.some(card => card.value === "A")? true: false
+    
+    if(gameState.gameStatus === "You Lost!"){
+      newMoney = gameState.money - gameState.currentBet  
+      newCurrentBet = 10
+    }
+    if(gameState.gameStatus === "You Win!"){
+      newMoney = gameState.money + gameState.currentBet  
+      newCurrentBet = 10
+    }
+    
     setGameState(
       {
         ...gameState,
         playerCount: playerNewCount,
         pcCount: pcNewCount,
         showAceValueButton: aceValueBUttonStatus,
-        gameStatus: newgameStatus
+        gameStatus: newgameStatus,
+        money: newMoney,
+        currentBet:newCurrentBet
       }
     )
   },[gameState.playerAceValue,gameState.currentPlayerHand, gameState.currentPcHand])
 
+  useEffect(()=>{
+    currentUser?
+      fetch(`http://localhost:3001/users/${currentUser.id}`,{
+        method: "PATCH",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          money: gameState.money
+        })
+      }).then(resp =>resp.json()).then(updatedUser => setCurrentUser({...currentUser, money:updatedUser.money}))
+     :null 
+  },[gameState.gameStatus, gameState.money])
   return (
+    <>
+    <Header currentGame={currentGame} setCurrentGame={setCurrentGame}logOut={logOut} currentUser={currentUser}  />
     <div className="blackjack-game">
       <div className='cardsDeck'>
           <ul>
-            {cardsOnDeck.map(card=>{
+            {cardsOnDeck.map((card,index)=>{
               return (
-                  <li className='facedownCard card'></li>
+                  <li key={index} className='facedownCard card'></li>
               )
               })}
           </ul>
       </div>
       <div className='main'>
-
-        <Button func={startGame} text={"Start Game"}/>
         {
-          gameState.gameStatus
-          ? (
-            <div className='action-buttons'>
-              <h1>{gameState.gameStatus}</h1>
-              <Button func={newGame} text={"New Game"}/>
-            </div>
+          cardsOnDeck.length > 10
+          ?(
+            !gameState.gameStarted
+              ?
+              (<>
+                <Button func={startGame} text={"Start Game"}/>
+                <label htmlFor="tripleDeck">
+                Triple Deck
+                  <input type="checkbox" name="tripleDeck" id="tripleDeck"
+                  onChange={()=>{
+                    setGameState({
+                      ...gameState, tripleDeck:!gameState.tripleDeck
+                    })
+                  }} 
+                  />
+                </label>
+              </>
+              )
+              :(
+                gameState.gameStatus
+                ? 
+                  <div className='action-buttons'>
+                    <h1>{gameState.gameStatus}</h1>
+                    <Button func={newGame} text={"New Game"}/>
+                  </div>
+                :(
+                    <div className='action-buttons'>
+                      <label htmlFor="label">
+                      <span>Bet: </span>
+                        <input 
+                          type="number" 
+                          name="bet" 
+                          id="bet"
+                          min={10}
+                          max={currentUser.money}
+                          defaultValue={10}
+                          onChange={(e)=>{
+                            setGameState({...gameState, currentBet : Number(e.target.value)})
+                          }}
+                          />
+                      </label>
+                      <div>
+                        <Button func={hit} text={"Hit"}/>
+                        <Button func={stand} text={"Stand"}/>
+                      </div>
+                    </div>
+                )
+              )
           )
           :(
-            <div className='action-buttons'>
-              <Button func={hit} text={"Hit"}/>
-              <Button func={stand} text={"Stand"}/>
-            </div>
+            <button 
+              onClick={()=>{
+                let shuffledCards = cards
+                setCardsOnDeck(shuffledCards)
+              }}
+            >Shuffle Cards</button>
           )
-        }
-        <h1>Player Count: {gameState.playerCount}</h1>
-        <AceButtons gameState={gameState} setGameState={setGameState} />
-        <h3>Player Hand: </h3>
-        <CardsOnHand cardsToShow={gameState.currentPlayerHand} />
-        <h1>PC Count: {gameState.pcCount}</h1>
-        <h3>PC Hand: {gameState.pcCount}</h3>
-        <CardsOnHand cardsToShow={gameState.currentPcHand} />
+            }
+                <div className='players'>
+                  <div className="player">
+                    <h1>Player Count: {gameState.playerCount}</h1>
+                    <h3>Player Hand: </h3>
+                    <CardsOnHand cardsToShow={gameState.currentPlayerHand} />
+                    <AceButtons gameState={gameState} setGameState={setGameState} />
+                  </div>
+                  <div className="pc">
+                    <h1>PC Count: {gameState.pcCount}</h1>
+                    <h3>PC Hand: {gameState.pcCount}</h3>
+                    <CardsOnHand cardsToShow={gameState.currentPcHand} />
+                  </div>
+                </div>
       </div>
 
     </div>
+    </>
+
   )
 }
 

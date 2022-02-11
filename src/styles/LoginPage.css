@@ -2,14 +2,19 @@
         display: grid;
         place-content: center;
         background-color: #222;
+        height: 100vh;
     }
     
     .users {
         background-color: white;
-        padding: 3rem 4rem;
+        padding: 2rem 4rem;
         display: grid;
         place-items: center;
         border-radius: 2rem;
+    }
+    
+    .users h1 {
+        margin: 0;
     }
     
     .users ul {
@@ -64,4 +69,56 @@
         color: white;
         text-transform: capitalize;
         margin: 20px 0 0 0;
+        cursor: pointer;
+    }
+    
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: grid;
+        width: 100%;
+        height: 100vh;
+        place-items: center;
+        backdrop-filter: blur(2px);
+    }
+    
+    .modal-content {
+        background-color: white;
+        border: 1px solid #222;
+        border-radius: 20px;
+        padding: 1rem 3rem;
+        position: relative;
+    }
+    
+    .closeModal {
+        position: absolute;
+        right: 10%;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        padding: .3rem;
+    }
+    
+    .closeModal:hover {
+        color: red;
+        transform: scale(1.4);
+    }
+    
+    .modal form {
+        display: grid;
+        gap: 10px
+    }
+    
+    .modal form label {
+        display: grid;
+        grid-template-columns: 0.5fr 1fr;
+    }
+    
+    .modal form label input {
+        border: none;
+        border-bottom: 1px solid #222;
+        outline: none;
+        padding: .2rem .5rem;
     }

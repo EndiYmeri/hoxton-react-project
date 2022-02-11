@@ -1,12 +1,103 @@
 {
-    "users": [{
-        "id": 1,
-        "username": "endi",
-        "fullName": "Endi Ymeri",
-        "email": "endiymeri20@gmail.com",
-        "games": [{
-            "id": 1,
-            "name": "blackjack"
-        }]
-    }]
+  "users": [
+    {
+      "id": 1,
+      "username": "endi",
+      "fullName": "Endi Ymeri",
+      "email": "endiymeri20@gmail.com",
+      "games": [
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        }
+      ],
+      "money": 0
+    },
+    {
+      "id": 2,
+      "username": "endiii",
+      "fullName": "Endi Ymeri",
+      "email": "endiymeri20@gmail.com",
+      "games": [
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        }
+      ],
+      "money": 186
+    },
+    {
+      "username": "Endi",
+      "fullName": "NDD NDD",
+      "email": "flashkidal@gmail.com",
+      "games": [
+        {
+          "id": 1,
+          "name": "blackjack"
+        }
+      ],
+      "money": 200,
+      "id": 3
+    },
+    {
+      "username": "endi.ymeri",
+      "fullName": "NDD NDD",
+      "email": "email@kot.com",
+      "games": [
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        }
+      ],
+      "money": 200,
+      "id": 4
+    },
+    {
+      "username": "Edniii",
+      "fullName": "asdnia",
+      "email": "email@kot.com",
+      "games": [
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        },
+        {
+          "id": 1,
+          "name": "blackjack"
+        }
+      ],
+      "money": 200,
+      "id": 5
+    }
+  ],
+  "games": [
+    {
+      "id": 1,
+      "name": "blackjack"
+    }
+  ]
 }

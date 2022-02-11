@@ -1,6 +1,25 @@
 import { useEffect, useState } from "react/cjs/react.development"
+import LoginForm from "../components/modals/LoginForm"
 
 export default function LoginPage({users, logIn, setCurrentUser }){
+    const [modal, setModal] = useState(false)
+
+
+    function addUser(newUsername, newFullName, newEmail){
+        fetch('http://localhost:3001/users',{
+            method:"POST",
+            headers:{
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                username: newUsername,
+                fullName: newFullName,
+                email: newEmail,
+                games: [],
+                money:200
+            })
+        }).then(resp=> resp.json()).then(newUser => logIn(newUser))
+    }
 
     return ( 
         <div className="login-page">
@@ -28,9 +47,17 @@ export default function LoginPage({users, logIn, setCurrentUser }){
                     }
                 </ul>
             </div>
-            <button className="">
+            <button 
+                onClick={()=>{
+                    setModal(true)
+                }}
+                className="">
                 Add User
             </button>
+            {modal
+            ?<LoginForm addUser={addUser} setModal={setModal}/>
+            :null
+            }
         </div>        
     )
 }

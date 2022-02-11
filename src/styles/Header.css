@@ -1,0 +1,31 @@
+.header {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    height: 100px;
+}
+
+.header .greeting {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+}
+
+.greeting h2 {
+    text-transform: capitalize;
+    margin: 5px 0;
+}
+
+.greeting h4 {
+    margin: 5px 0px;
+}
+
+.greeting img {
+    width: 70px;
+}
+
+.account-buttons {
+    display: grid;
+}
